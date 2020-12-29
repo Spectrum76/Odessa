@@ -5,6 +5,8 @@ public:
 	Renderer(GLFWwindow* window);
 	~Renderer();
 
+	void InitializeAPI();
+
 protected:
 	void CreateInstance();
 	void CreateLogicalDevice();

@@ -19,6 +19,14 @@ Renderer::~Renderer()
 	vkDestroyInstance(instance, nullptr);
 }
 
+void Renderer::InitializeAPI()
+{
+	CreateInstance();
+	GetPhysicalDevice();
+	CreateSurface();
+	CreateLogicalDevice();
+}
+
 void Renderer::CreateInstance()
 {
 	VkApplicationInfo appInfo{};
