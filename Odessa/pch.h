@@ -8,5 +8,12 @@
 #define PCH_H
 
 // add headers that you want to pre-compile here
+#include <stdexcept>
+#include <vector>
+#include <iostream>
+
+#include <vulkan/vulkan.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 #endif //PCH_H
