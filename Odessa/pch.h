@@ -11,6 +11,9 @@
 #include <stdexcept>
 #include <vector>
 #include <iostream>
+#include <optional>
+#include <cstdlib>
+#include <set>
 
 #include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>
