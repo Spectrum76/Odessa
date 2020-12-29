@@ -51,6 +51,15 @@ void Renderer::CreateInstance()
 	instanceInfo.ppEnabledExtensionNames = glfwExtensions;
 	instanceInfo.enabledLayerCount = 0;
 
+#ifdef _DEBUG
+	
+	const std::vector<const char*> validationLayers = { "VK_LAYER_KHRONOS_validation" };
+
+	instanceInfo.enabledLayerCount = validationLayers.size();
+	instanceInfo.ppEnabledLayerNames = validationLayers.data();
+
+#endif // DEBUG
+
 	if (vkCreateInstance(&instanceInfo, nullptr, &instance) != VK_SUCCESS)
 	{
 		throw std::runtime_error("Failed to Create Instance!");
