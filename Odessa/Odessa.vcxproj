@@ -183,6 +183,22 @@
       <Project>{616654c7-c92d-3541-99e0-e8493fb31075}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="PixelShader.frag">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">glslc %(Filename)%(Extension) -o $(OutDir)\Shader\%(Filename)%(Extension).spv</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">glslc %(Filename)%(Extension) -o $(OutDir)\Shader\%(Filename)%(Extension).spv</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\Shader\%(Filename)%(Extension).spv;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\Shader\%(Filename)%(Extension).spv;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="VertexShader.vert">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">glslc %(Filename)%(Extension) -o $(OutDir)\Shader\%(Filename)%(Extension).spv</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">glslc %(Filename)%(Extension) -o $(OutDir)\Shader\%(Filename)%(Extension).spv</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\Shader\%(Filename)%(Extension).spv;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\Shader\%(Filename)%(Extension).spv;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
