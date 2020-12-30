@@ -14,6 +14,7 @@
 #include <optional>
 #include <cstdlib>
 #include <set>
+#include <memory>
 
 #include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>

@@ -1,4 +1,6 @@
 #pragma once
+#include "SwapChain.h"
+
 class Renderer
 {
 public:
@@ -10,7 +12,6 @@ public:
 protected:
 	void CreateInstance();
 	void CreateLogicalDevice();
-	void CreateSurface();
 
 	void GetPhysicalDevice();
 
@@ -19,11 +20,12 @@ private:
 	VkDevice device;
 
 	GLFWwindow* glfwWindow;
-	VkSurfaceKHR surface;
 
 	VkQueue graphicsQueue;
 	VkQueue presentQueue;
 
 	VkPhysicalDevice GPU;
+
+	std::unique_ptr<SwapChain> mSwapChain;
 };
 

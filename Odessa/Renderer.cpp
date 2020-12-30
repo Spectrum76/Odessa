@@ -9,13 +9,11 @@ Renderer::Renderer(GLFWwindow* window) : glfwWindow(window)
 	GPU = VK_NULL_HANDLE;
 	graphicsQueue = VK_NULL_HANDLE;
 	presentQueue = VK_NULL_HANDLE;
-	surface = VK_NULL_HANDLE;
 }
 
 Renderer::~Renderer()
 {
 	vkDestroyDevice(device, nullptr);
-	vkDestroySurfaceKHR(instance, surface, nullptr);
 	vkDestroyInstance(instance, nullptr);
 }
 
@@ -23,7 +21,9 @@ void Renderer::InitializeAPI()
 {
 	CreateInstance();
 	GetPhysicalDevice();
-	CreateSurface();
+
+	mSwapChain = std::make_unique<SwapChain>(instance, device, glfwWindow, GPU);
+
 	CreateLogicalDevice();
 }
 
@@ -55,7 +55,7 @@ void Renderer::CreateInstance()
 	
 	const std::vector<const char*> validationLayers = { "VK_LAYER_KHRONOS_validation" };
 
-	instanceInfo.enabledLayerCount = validationLayers.size();
+	instanceInfo.enabledLayerCount = (uint32_t) validationLayers.size();
 	instanceInfo.ppEnabledLayerNames = validationLayers.data();
 
 #endif // DEBUG
@@ -68,7 +68,7 @@ void Renderer::CreateInstance()
 
 void Renderer::CreateLogicalDevice()
 {
-	Utilities::QueueFamilyIndices queueIndex = Utilities::FindQueueFamilies(GPU, surface);
+	Utilities::QueueFamilyIndices queueIndex = Utilities::FindQueueFamilies(GPU, mSwapChain->GetSurface());
 	std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 	std::set<uint32_t> uniqueQueueFamilies = { queueIndex.graphicsFamily.value(), queueIndex.presentFamily.value() };
 
@@ -103,14 +103,6 @@ void Renderer::CreateLogicalDevice()
 
 	vkGetDeviceQueue(device, queueIndex.graphicsFamily.value(), 0, &graphicsQueue);
 	vkGetDeviceQueue(device, queueIndex.presentFamily.value(), 0, &presentQueue);
-}
-
-void Renderer::CreateSurface()
-{
-	if (glfwCreateWindowSurface(instance, glfwWindow, nullptr, &surface) != VK_SUCCESS)
-	{
-		throw std::runtime_error("Failed to Create Surface!");
-	}
 }
 
 void Renderer::GetPhysicalDevice()
