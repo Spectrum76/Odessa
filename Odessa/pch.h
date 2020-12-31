@@ -15,6 +15,8 @@
 #include <cstdlib>
 #include <set>
 #include <memory>
+#include <fstream>
+#include <string>
 
 #include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>
