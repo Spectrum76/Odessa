@@ -5,6 +5,8 @@ public:
 	Shader(VkDevice device, const std::string& filename);
 	~Shader();
 
+	VkShaderModule GetShaderModule();
+
 protected:
 	void CreateModule();
 	void LoadShaderData(const std::string& filename);

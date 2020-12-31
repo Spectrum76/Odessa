@@ -17,6 +17,11 @@
 #include <memory>
 #include <fstream>
 #include <string>
+#include <array>
+
+#define WIDTH 800
+#define HEIGHT 600
+#define ImageCount 3
 
 #include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>

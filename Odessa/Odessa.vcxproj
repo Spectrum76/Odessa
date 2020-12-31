@@ -175,16 +175,20 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SwapChain.cpp" />
     <ClCompile Include="Utilities.cpp" />
+    <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="RenderPass.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="Utilities.h" />
+    <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\glfw-build\src\glfw.vcxproj">

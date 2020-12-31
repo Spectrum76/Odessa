@@ -2,8 +2,8 @@
 #include "SwapChain.h"
 #include "Utilities.h"
 
-SwapChain::SwapChain(VkInstance instance, VkDevice device, GLFWwindow* window, VkPhysicalDevice GPU) :
-	mInstanceRef(instance), mDeviceRef(device), glfwWindow(window), mGPURef(GPU)
+SwapChain::SwapChain(VkInstance instance, GLFWwindow* window, VkPhysicalDevice GPU) :
+	mInstanceRef(instance), glfwWindow(window), mGPURef(GPU)
 {
 	mSwapchain = VK_NULL_HANDLE;
 	mSurface = VK_NULL_HANDLE;
@@ -23,8 +23,10 @@ SwapChain::~SwapChain()
 	vkDestroySurfaceKHR(mInstanceRef, mSurface, nullptr);
 }
 
-void SwapChain::Initialize()
+void SwapChain::Initialize(VkDevice device)
 {
+	mDeviceRef = device;
+
 	CreateSwapChain();
 	CreateImageViews();
 }
@@ -32,6 +34,11 @@ void SwapChain::Initialize()
 VkSurfaceKHR SwapChain::GetSurface()
 {
 	return VkSurfaceKHR(mSurface);
+}
+
+std::vector<VkImageView>* SwapChain::GetImageView()
+{
+	return &mSwapChainImageViews;
 }
 
 void SwapChain::CreateSwapChain()

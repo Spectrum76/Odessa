@@ -4,11 +4,18 @@
 Shader::Shader(VkDevice device, const std::string& filename) : mDeviceRef(device)
 {
 	mModule = VK_NULL_HANDLE;
+	LoadShaderData(filename);
+	CreateModule();
 }
 
 Shader::~Shader()
 {
 	vkDestroyShaderModule(mDeviceRef, mModule, nullptr);
+}
+
+VkShaderModule Shader::GetShaderModule()
+{
+	return VkShaderModule(mModule);
 }
 
 void Shader::CreateModule()

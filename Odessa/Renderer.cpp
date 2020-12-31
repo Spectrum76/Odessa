@@ -22,9 +22,15 @@ void Renderer::InitializeAPI()
 	CreateInstance();
 	GetPhysicalDevice();
 
-	mSwapChain = std::make_unique<SwapChain>(instance, device, glfwWindow, GPU);
+	mSwapChain = std::make_unique<SwapChain>(instance, glfwWindow, GPU);
 
 	CreateLogicalDevice();
+
+	mSwapChain->Initialize(device);
+
+	mRenderPass = std::make_unique<RenderPass>(device, mSwapChain->GetImageView());
+
+	mRenderPass->Initialize();
 }
 
 void Renderer::CreateInstance()

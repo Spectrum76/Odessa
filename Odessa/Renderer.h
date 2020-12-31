@@ -1,5 +1,6 @@
 #pragma once
 #include "SwapChain.h"
+#include "RenderPass.h"
 
 class Renderer
 {
@@ -27,5 +28,6 @@ private:
 	VkPhysicalDevice GPU;
 
 	std::unique_ptr<SwapChain> mSwapChain;
+	std::unique_ptr<RenderPass> mRenderPass;
 };
 
