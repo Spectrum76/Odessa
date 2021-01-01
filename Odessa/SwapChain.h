@@ -8,6 +8,8 @@ public:
 	void Initialize(VkDevice device);
 
 	VkSurfaceKHR GetSurface();
+	VkSwapchainKHR GetSwapChain();
+
 	std::vector<VkImageView>* GetImageView();
 
 protected:

@@ -7,14 +7,63 @@ Renderer::Renderer(GLFWwindow* window) : glfwWindow(window)
 	instance = VK_NULL_HANDLE;
 	device = VK_NULL_HANDLE;
 	GPU = VK_NULL_HANDLE;
+
 	graphicsQueue = VK_NULL_HANDLE;
 	presentQueue = VK_NULL_HANDLE;
+
+	imageAvailableSemaphore = VK_NULL_HANDLE;
+	renderFinishedSemaphore = VK_NULL_HANDLE;
 }
 
 Renderer::~Renderer()
 {
+	vkDestroySemaphore(device, renderFinishedSemaphore, nullptr);
+	vkDestroySemaphore(device, imageAvailableSemaphore, nullptr);
+
 	vkDestroyDevice(device, nullptr);
 	vkDestroyInstance(instance, nullptr);
+}
+
+void Renderer::Render()
+{
+	uint32_t imageIndex;
+	vkAcquireNextImageKHR(device, mSwapChain->GetSwapChain(), UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
+
+	VkSubmitInfo submitInfo{};
+	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+
+	VkSemaphore waitSemaphores[] = { imageAvailableSemaphore };
+	VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+	submitInfo.waitSemaphoreCount = 1;
+	submitInfo.pWaitSemaphores = waitSemaphores;
+	submitInfo.pWaitDstStageMask = waitStages;
+
+	VkCommandBuffer commandBuffer = (*(mCommandBuffer->GetCommandBuffer()))[imageIndex];
+
+	submitInfo.commandBufferCount = 1;
+	submitInfo.pCommandBuffers = &commandBuffer;
+
+	VkSemaphore signalSemaphores[] = { renderFinishedSemaphore };
+	submitInfo.signalSemaphoreCount = 1;
+	submitInfo.pSignalSemaphores = signalSemaphores;
+
+	if (vkQueueSubmit(graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS)
+	{
+		throw std::runtime_error("failed to submit draw command buffer!");
+	}
+
+	VkPresentInfoKHR presentInfo{};
+	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+
+	presentInfo.waitSemaphoreCount = 1;
+	presentInfo.pWaitSemaphores = signalSemaphores;
+
+	VkSwapchainKHR swapChains[] = { mSwapChain->GetSwapChain() };
+	presentInfo.swapchainCount = 1;
+	presentInfo.pSwapchains = swapChains;
+	presentInfo.pImageIndices = &imageIndex;
+
+	vkQueuePresentKHR(presentQueue, &presentInfo);
 }
 
 void Renderer::InitializeAPI()
@@ -31,6 +80,12 @@ void Renderer::InitializeAPI()
 	mRenderPass = std::make_unique<RenderPass>(device, mSwapChain->GetImageView());
 
 	mRenderPass->Initialize();
+
+	mCommandBuffer = std::make_unique<CommandBuffer>(device, mSwapChain->GetSurface(), GPU);
+
+	mCommandBuffer->Initialize();
+
+	mCommandBuffer->Record(mRenderPass->GetRenderPass(), mRenderPass->GetFramebuffer());
 }
 
 void Renderer::CreateInstance()
@@ -58,10 +113,10 @@ void Renderer::CreateInstance()
 	instanceInfo.enabledLayerCount = 0;
 
 #ifdef _DEBUG
-	
+
 	const std::vector<const char*> validationLayers = { "VK_LAYER_KHRONOS_validation" };
 
-	instanceInfo.enabledLayerCount = (uint32_t) validationLayers.size();
+	instanceInfo.enabledLayerCount = (uint32_t)validationLayers.size();
 	instanceInfo.ppEnabledLayerNames = validationLayers.data();
 
 #endif // DEBUG
@@ -109,6 +164,18 @@ void Renderer::CreateLogicalDevice()
 
 	vkGetDeviceQueue(device, queueIndex.graphicsFamily.value(), 0, &graphicsQueue);
 	vkGetDeviceQueue(device, queueIndex.presentFamily.value(), 0, &presentQueue);
+}
+
+void Renderer::CreateSemaphores()
+{
+	VkSemaphoreCreateInfo semaphoreInfo{};
+	semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+	if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &imageAvailableSemaphore) != VK_SUCCESS ||
+		vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphore) != VK_SUCCESS)
+	{
+		throw std::runtime_error("failed to create semaphores!");
+	}
 }
 
 void Renderer::GetPhysicalDevice()

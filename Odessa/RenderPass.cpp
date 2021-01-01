@@ -25,6 +25,16 @@ void RenderPass::Initialize()
 	CreatePipeline();
 }
 
+VkRenderPass RenderPass::GetRenderPass()
+{
+	return VkRenderPass(mRenderPass);
+}
+
+std::vector<VkFramebuffer>* RenderPass::GetFramebuffer()
+{
+	return &mFramebuffer;
+}
+
 void RenderPass::CreateRenderPass()
 {
 	VkAttachmentDescription colorAttachment{};

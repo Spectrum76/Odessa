@@ -7,6 +7,9 @@ public:
 
 	void Initialize();
 
+	VkRenderPass GetRenderPass();
+	std::vector<VkFramebuffer>* GetFramebuffer();
+
 protected:
 	void CreateRenderPass();
 	void CreateFramebuffer();

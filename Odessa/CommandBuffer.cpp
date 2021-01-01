@@ -28,6 +28,11 @@ void CommandBuffer::Record(VkRenderPass RenderPass, std::vector<VkFramebuffer>* 
 	RecordCommandBuffer();
 }
 
+std::vector<VkCommandBuffer>* CommandBuffer::GetCommandBuffer()
+{
+	return &mCommandBuffers;
+}
+
 void CommandBuffer::CreateCommandPool()
 {
 	Utilities::QueueFamilyIndices queueFamilyIndices = Utilities::FindQueueFamilies(mGPURef, mSurfaceRef);

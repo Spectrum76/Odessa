@@ -8,6 +8,8 @@ public:
 	void Initialize();
 	void Record(VkRenderPass RenderPass, std::vector<VkFramebuffer>* pFramebuffer);
 
+	std::vector<VkCommandBuffer>* GetCommandBuffer();
+
 protected:
 	void CreateCommandPool();
 	void CreateCommandBuffer();

@@ -36,6 +36,11 @@ VkSurfaceKHR SwapChain::GetSurface()
 	return VkSurfaceKHR(mSurface);
 }
 
+VkSwapchainKHR SwapChain::GetSwapChain()
+{
+	return VkSwapchainKHR(mSwapchain);
+}
+
 std::vector<VkImageView>* SwapChain::GetImageView()
 {
 	return &mSwapChainImageViews;
