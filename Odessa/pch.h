@@ -22,6 +22,7 @@
 #define WIDTH 800
 #define HEIGHT 600
 #define ImageCount 3
+#define InFlightCount 2
 
 #include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>

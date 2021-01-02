@@ -30,8 +30,13 @@ private:
 
 	VkPhysicalDevice GPU;
 
-	VkSemaphore imageAvailableSemaphore;
-	VkSemaphore renderFinishedSemaphore;
+	size_t mCurrentFrame;
+
+	std::vector<VkSemaphore> imageAvailableSemaphore;
+	std::vector<VkSemaphore> renderFinishedSemaphore;
+
+	std::vector<VkFence> inFlightFences;
+	std::vector<VkFence> imagesInFlight;
 
 	std::unique_ptr<SwapChain> mSwapChain;
 	std::unique_ptr<RenderPass> mRenderPass;
