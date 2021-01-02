@@ -85,9 +85,7 @@ void RenderPass::CreateFramebuffer()
 
 	for (size_t i = 0; i < ImageCount; i++)
 	{
-		VkImageView attachments[ImageCount];
-
-		attachments[i] = (*mSwapChainImageViews)[i];
+		VkImageView attachments[] = { (*mSwapChainImageViews)[i] };
 
 		VkFramebufferCreateInfo framebufferInfo{};
 		framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;

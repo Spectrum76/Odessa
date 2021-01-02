@@ -75,6 +75,8 @@ void Renderer::InitializeAPI()
 
 	CreateLogicalDevice();
 
+	CreateSemaphores();
+
 	mSwapChain->Initialize(device);
 
 	mRenderPass = std::make_unique<RenderPass>(device, mSwapChain->GetImageView());
