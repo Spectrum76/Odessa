@@ -2,9 +2,32 @@
 // Copyright (c) 2020-2021 Rayvant.
 
 #include "pch.h"
-#include <iostream>
+#include "Renderer.h"
+
+GLFWwindow* window;
+Renderer* renderer;
 
 int main()
 {
-	std::cout << "Hello World!\n";
+	glfwInit();
+
+	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
+	window = glfwCreateWindow(WIDTH, HEIGHT, "Kassandra", nullptr, nullptr);
+
+	renderer = new Renderer(window);
+
+	renderer->Init();
+
+	while (!glfwWindowShouldClose(window))
+	{
+		renderer->Render();
+		glfwPollEvents();
+	}
+
+	delete renderer;
+
+	glfwDestroyWindow(window);
+	glfwTerminate();
 }

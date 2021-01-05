@@ -34,5 +34,8 @@
 #include <Windows.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <GLFW/glfw3native.h>
+#include <d3d11.h>
+#include <dxgi1_4.h>
 
 #endif //PCH_H
