@@ -2,12 +2,11 @@
 class SwapChain
 {
 public:
-	SwapChain(VkInstance instance, GLFWwindow* window, VkPhysicalDevice GPU);
+	SwapChain(VkInstance instance, VkSurfaceKHR surface, VkDevice device, VkPhysicalDevice GPU);
 	~SwapChain();
 
-	void Initialize(VkDevice device);
+	void Initialize();
 
-	VkSurfaceKHR GetSurface();
 	VkSwapchainKHR GetSwapChain();
 
 	std::vector<VkImageView>* GetImageView();
@@ -15,13 +14,11 @@ public:
 protected:
 	void CreateSwapChain();
 	void CreateImageViews();
-	void CreateSurface();
 
 private:
 	VkSwapchainKHR mSwapchain;
 
-	GLFWwindow* glfwWindow;
-	VkSurfaceKHR mSurface;
+	VkSurfaceKHR mSurfaceRef;
 
 	std::vector<VkImage> mSwapchainImages;
 	std::vector<VkImageView> mSwapChainImageViews;
@@ -30,8 +27,5 @@ private:
 
 	const VkInstance mInstanceRef;
 	const VkPhysicalDevice mGPURef;
-
-	uint32_t mSwapchainWidth;
-	uint32_t mSwapchainHeight;
 };
 

@@ -2,38 +2,26 @@
 #include "SwapChain.h"
 #include "Utilities.h"
 
-SwapChain::SwapChain(VkInstance instance, GLFWwindow* window, VkPhysicalDevice GPU) :
-	mInstanceRef(instance), glfwWindow(window), mGPURef(GPU)
+SwapChain::SwapChain(VkInstance instance, VkSurfaceKHR surface, VkDevice device, VkPhysicalDevice GPU) :
+	mInstanceRef(instance), mSurfaceRef(surface), mDeviceRef(device), mGPURef(GPU)
 {
 	mSwapchain = VK_NULL_HANDLE;
-	mSurface = VK_NULL_HANDLE;
-
-	int width, height;
-	glfwGetWindowSize(window, &width, &height);
-
-	mSwapchainWidth = width;
-	mSwapchainHeight = height;
-
-	CreateSurface();
 }
 
 SwapChain::~SwapChain()
 {
+	for (auto imageView : mSwapChainImageViews) 
+	{
+		vkDestroyImageView(mDeviceRef, imageView, nullptr);
+	}
+
 	vkDestroySwapchainKHR(mDeviceRef, mSwapchain, nullptr);
-	vkDestroySurfaceKHR(mInstanceRef, mSurface, nullptr);
 }
 
-void SwapChain::Initialize(VkDevice device)
+void SwapChain::Initialize()
 {
-	mDeviceRef = device;
-
 	CreateSwapChain();
 	CreateImageViews();
-}
-
-VkSurfaceKHR SwapChain::GetSurface()
-{
-	return VkSurfaceKHR(mSurface);
 }
 
 VkSwapchainKHR SwapChain::GetSwapChain()
@@ -48,7 +36,7 @@ std::vector<VkImageView>* SwapChain::GetImageView()
 
 void SwapChain::CreateSwapChain()
 {
-	Utilities::QueueFamilyIndices indices = Utilities::FindQueueFamilies(mGPURef, mSurface);
+	Utilities::QueueFamilyIndices indices = Utilities::FindQueueFamilies(mGPURef, mSurfaceRef);
 	uint32_t queueFamilyIndices[] = { indices.graphicsFamily.value(), indices.presentFamily.value() };
 
 	VkSwapchainCreateInfoKHR swapchainInfo{};
@@ -56,9 +44,9 @@ void SwapChain::CreateSwapChain()
 	swapchainInfo.imageFormat = VK_FORMAT_B8G8R8A8_SRGB;
 	swapchainInfo.imageColorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
 	swapchainInfo.presentMode = VK_PRESENT_MODE_MAILBOX_KHR;
-	swapchainInfo.imageExtent = VkExtent2D{ mSwapchainWidth, mSwapchainHeight };
+	swapchainInfo.imageExtent = VkExtent2D{ WIDTH, HEIGHT };
 	swapchainInfo.minImageCount = 3;
-	swapchainInfo.surface = mSurface;
+	swapchainInfo.surface = mSurfaceRef;
 	swapchainInfo.imageArrayLayers = 1;
 	swapchainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 	swapchainInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
@@ -106,13 +94,5 @@ void SwapChain::CreateImageViews()
 		{
 			throw std::runtime_error("Failed to create image views");
 		}
-	}
-}
-
-void SwapChain::CreateSurface()
-{
-	if (glfwCreateWindowSurface(mInstanceRef, glfwWindow, nullptr, &mSurface) != VK_SUCCESS)
-	{
-		throw std::runtime_error("Failed to Create Surface!");
 	}
 }

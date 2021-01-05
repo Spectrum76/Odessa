@@ -12,6 +12,11 @@ RenderPass::RenderPass(VkDevice device, std::vector<VkImageView>* pImageViews) :
 
 RenderPass::~RenderPass()
 {
+	for (auto framebuffer : mFramebuffer)
+	{
+		vkDestroyFramebuffer(mDeviceRef, framebuffer, nullptr);
+	}
+
 	vkDestroyPipeline(mDeviceRef, mPipeline, nullptr);
 	vkDestroyPipelineLayout(mDeviceRef, mPipelineLayout, nullptr);
 	vkDestroyRenderPass(mDeviceRef, mRenderPass, nullptr);

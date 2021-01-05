@@ -8,6 +8,8 @@ Renderer::Renderer(GLFWwindow* window) : glfwWindow(window)
 	device = VK_NULL_HANDLE;
 	GPU = VK_NULL_HANDLE;
 
+	surface = VK_NULL_HANDLE;
+
 	graphicsQueue = VK_NULL_HANDLE;
 	presentQueue = VK_NULL_HANDLE;
 
@@ -16,14 +18,22 @@ Renderer::Renderer(GLFWwindow* window) : glfwWindow(window)
 
 Renderer::~Renderer()
 {
+	vkDeviceWaitIdle(device);
+
 	for (size_t i = 0; i < InFlightCount; i++)
 	{
 		vkDestroySemaphore(device, renderFinishedSemaphore[i], nullptr);
 		vkDestroySemaphore(device, imageAvailableSemaphore[i], nullptr);
-
 		vkDestroyFence(device, inFlightFences[i], nullptr);
-		vkDestroyFence(device, imagesInFlight[i], nullptr);
 	}
+
+	mCommandBuffer.reset();
+
+	mRenderPass.reset();
+
+	mSwapChain.reset();
+
+	vkDestroySurfaceKHR(instance, surface, nullptr);
 
 	vkDestroyDevice(device, nullptr);
 	vkDestroyInstance(instance, nullptr);
@@ -89,19 +99,21 @@ void Renderer::InitializeAPI()
 	CreateInstance();
 	GetPhysicalDevice();
 
-	mSwapChain = std::make_unique<SwapChain>(instance, glfwWindow, GPU);
+	CreateSurface();
 
 	CreateLogicalDevice();
 
 	CreateSemaphores();
 
-	mSwapChain->Initialize(device);
+	mSwapChain = std::make_unique<SwapChain>(instance, surface, device, GPU);
+
+	mSwapChain->Initialize();
 
 	mRenderPass = std::make_unique<RenderPass>(device, mSwapChain->GetImageView());
 
 	mRenderPass->Initialize();
 
-	mCommandBuffer = std::make_unique<CommandBuffer>(device, mSwapChain->GetSurface(), GPU);
+	mCommandBuffer = std::make_unique<CommandBuffer>(device, surface, GPU);
 
 	mCommandBuffer->Initialize();
 
@@ -149,7 +161,7 @@ void Renderer::CreateInstance()
 
 void Renderer::CreateLogicalDevice()
 {
-	Utilities::QueueFamilyIndices queueIndex = Utilities::FindQueueFamilies(GPU, mSwapChain->GetSurface());
+	Utilities::QueueFamilyIndices queueIndex = Utilities::FindQueueFamilies(GPU, surface);
 	std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 	std::set<uint32_t> uniqueQueueFamilies = { queueIndex.graphicsFamily.value(), queueIndex.presentFamily.value() };
 
@@ -205,11 +217,18 @@ void Renderer::CreateSemaphores()
 	{
 		if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &imageAvailableSemaphore[i]) != VK_SUCCESS ||
 			vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphore[i]) != VK_SUCCESS ||
-			vkCreateFence(device, &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS ||
-			vkCreateFence(device, &fenceInfo, nullptr, &imagesInFlight[i]) != VK_SUCCESS)
+			vkCreateFence(device, &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS)
 		{
 			throw std::runtime_error("failed to create semaphores!");
 		}
+	}
+}
+
+void Renderer::CreateSurface()
+{
+	if (glfwCreateWindowSurface(instance, glfwWindow, nullptr, &surface) != VK_SUCCESS)
+	{
+		throw std::runtime_error("Failed to Create Surface!");
 	}
 }
 

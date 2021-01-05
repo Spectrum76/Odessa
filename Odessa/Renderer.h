@@ -16,6 +16,7 @@ protected:
 	void CreateInstance();
 	void CreateLogicalDevice();
 	void CreateSemaphores();
+	void CreateSurface();
 
 	void GetPhysicalDevice();
 
@@ -24,6 +25,7 @@ private:
 	VkDevice device;
 
 	GLFWwindow* glfwWindow;
+	VkSurfaceKHR surface;
 
 	VkQueue graphicsQueue;
 	VkQueue presentQueue;
