@@ -1,4 +1,12 @@
-float4 main( float4 pos : POSITION ) : SV_POSITION
+#include <Input.hlsli>
+
+PSInput main(float3 Position : POSITION, float2 TexCoord : TEXCOORD, float3 Normal : NORMAL)
 {
-	return pos;
+    PSInput result;
+
+    result.Position = Position;
+    result.TexCoord = TexCoord;
+    result.Normal = Normal;
+    
+    return result;
 }
