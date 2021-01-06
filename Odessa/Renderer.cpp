@@ -54,7 +54,21 @@ void Renderer::Render()
 
 	const float clearColor[] = { 0.3f, 0.3f, 0.3f, 1.0f };
 	mDeviceContext->ClearRenderTargetView(mRTV, clearColor);
+}
+
+void Renderer::Present()
+{
 	mSwapchain->Present(0, 0);
+}
+
+ID3D11Device* Renderer::GetDevice()
+{
+	return mDevice;
+}
+
+ID3D11DeviceContext* Renderer::GetContext()
+{
+	return mDeviceContext;
 }
 
 void Renderer::InitAPI()

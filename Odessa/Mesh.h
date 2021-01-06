@@ -1,10 +1,12 @@
 #pragma once
 #include "Types.h"
+#include "Renderer.h"
 
 class Mesh
 {
 public:
 	Mesh(ID3D11Device* device, ID3D11DeviceContext* context);
+	Mesh(Renderer* renderer);
 	~Mesh();
 
 	void Initialize(std::vector<Vertex> Vertices, std::vector<uint32_t> Indices);

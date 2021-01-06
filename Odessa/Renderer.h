@@ -7,6 +7,10 @@ public:
 
 	void Init();
 	void Render();
+	void Present();
+
+	ID3D11Device* GetDevice();
+	ID3D11DeviceContext* GetContext();
 
 protected:
 	void InitAPI();

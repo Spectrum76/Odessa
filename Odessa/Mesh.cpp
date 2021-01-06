@@ -11,6 +11,10 @@ Mesh::Mesh(ID3D11Device* device, ID3D11DeviceContext* context) : mDeviceRef(devi
 	Offset = 0;
 }
 
+Mesh::Mesh(Renderer* renderer) : Mesh(renderer->GetDevice(), renderer->GetContext())
+{
+}
+
 Mesh::~Mesh()
 {
 	mVertexBuffer->Release();
