@@ -12,6 +12,9 @@ protected:
 	void InitAPI();
 	void InitSwapchain();
 	void InitFrameBuffer();
+	void InitPipeline();
+
+	std::vector<char> Read(std::string File);
 
 private:
 	GLFWwindow* mWindow;
@@ -25,5 +28,10 @@ private:
 
 	ID3D11Texture2D* mRenderTarget;
 	ID3D11RenderTargetView* mRTV;
+
+	ID3D11InputLayout* mInputLayout;
+
+	ID3D11VertexShader* mVertexShader;
+	ID3D11PixelShader* mPixelShader;
 };
 

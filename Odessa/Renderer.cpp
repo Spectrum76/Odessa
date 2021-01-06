@@ -12,10 +12,20 @@ Renderer::Renderer(GLFWwindow* window) : mWindow(window)
 
 	mRenderTarget = nullptr;
 	mRTV = nullptr;
+
+	mInputLayout = nullptr;
+
+	mVertexShader = nullptr;
+	mPixelShader = nullptr;
 }
 
 Renderer::~Renderer()
 {
+	mInputLayout->Release();
+
+	mVertexShader->Release();
+	mPixelShader->Release();
+
 	mRTV->Release();
 	mRenderTarget->Release();
 
@@ -32,10 +42,16 @@ void Renderer::Init()
 	InitAPI();
 	InitSwapchain();
 	InitFrameBuffer();
+	InitPipeline();
 }
 
 void Renderer::Render()
 {
+	mDeviceContext->VSSetShader(mVertexShader, 0, 0);
+	mDeviceContext->PSSetShader(mPixelShader, 0, 0);
+
+	mDeviceContext->OMSetRenderTargets(1, &mRTV, nullptr);
+
 	const float clearColor[] = { 0.3f, 0.3f, 0.3f, 1.0f };
 	mDeviceContext->ClearRenderTargetView(mRTV, clearColor);
 	mSwapchain->Present(0, 0);
@@ -72,4 +88,34 @@ void Renderer::InitFrameBuffer()
 	mSwapchain->GetBuffer(0, IID_PPV_ARGS(&mRenderTarget));
 
 	mDevice->CreateRenderTargetView(mRenderTarget, nullptr, &mRTV);
+}
+
+void Renderer::InitPipeline()
+{
+	D3D11_INPUT_ELEMENT_DESC inputElementDescs[] =
+	{
+	  { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	  { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,	0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	  { "NORMAL",	0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	};
+
+	auto VSBytecode = Read("VertexShader.cso");
+	auto PSBytecode = Read("PixelShader.cso");
+
+	mDevice->CreateVertexShader(VSBytecode.data(), VSBytecode.size(), nullptr, &mVertexShader);
+	mDevice->CreatePixelShader(PSBytecode.data(), PSBytecode.size(), nullptr, &mPixelShader);
+
+	mDevice->CreateInputLayout(inputElementDescs, _countof(inputElementDescs), VSBytecode.data(), VSBytecode.size(), &mInputLayout);
+}
+
+std::vector<char> Renderer::Read(std::string File)
+{
+	std::ifstream read(File.c_str(), std::ios::binary | std::ios::ate);
+	std::ifstream::pos_type pos = read.tellg();
+
+	std::vector<char> buff(pos);
+	read.seekg(0, std::ios::beg);
+	read.read(buff.data(), pos);
+
+	return buff;
 }
