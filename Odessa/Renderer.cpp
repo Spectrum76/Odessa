@@ -10,10 +10,22 @@ Renderer::Renderer(GLFWwindow* window) : mWindow(window)
 
 	mSwapchain = nullptr;
 
+	mViewport.TopLeftX = 0.0f;
+	mViewport.TopLeftY = 0.0f;
+	mViewport.Width = static_cast<float>(WIDTH);
+	mViewport.Height = static_cast<float>(HEIGHT);
+	mViewport.MinDepth = 0.0f;
+	mViewport.MaxDepth = 1.0f;
+
 	mRenderTarget = nullptr;
 	mRTV = nullptr;
 
+	mDSBuffer = nullptr;
+	mDSState = nullptr;
+	mDSView = nullptr;
+
 	mInputLayout = nullptr;
+	mRasterState = nullptr;
 
 	mVertexShader = nullptr;
 	mPixelShader = nullptr;
@@ -22,9 +34,14 @@ Renderer::Renderer(GLFWwindow* window) : mWindow(window)
 Renderer::~Renderer()
 {
 	mInputLayout->Release();
+	mRasterState->Release();
 
 	mVertexShader->Release();
 	mPixelShader->Release();
+
+	mDSBuffer->Release();
+	mDSState->Release();
+	mDSView->Release();
 
 	mRTV->Release();
 	mRenderTarget->Release();
@@ -50,10 +67,18 @@ void Renderer::Render()
 	mDeviceContext->VSSetShader(mVertexShader, 0, 0);
 	mDeviceContext->PSSetShader(mPixelShader, 0, 0);
 
-	mDeviceContext->OMSetRenderTargets(1, &mRTV, nullptr);
+	mDeviceContext->IASetInputLayout(mInputLayout);
+	mDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	mDeviceContext->RSSetViewports(1, &mViewport);
+	mDeviceContext->RSSetState(mRasterState);
+
+	mDeviceContext->OMSetRenderTargets(1, &mRTV, mDSView);
+	mDeviceContext->OMSetDepthStencilState(mDSState, 1);
 
 	const float clearColor[] = { 0.3f, 0.3f, 0.3f, 1.0f };
 	mDeviceContext->ClearRenderTargetView(mRTV, clearColor);
+	mDeviceContext->ClearDepthStencilView(mDSView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 void Renderer::Present()
@@ -102,6 +127,33 @@ void Renderer::InitFrameBuffer()
 	mSwapchain->GetBuffer(0, IID_PPV_ARGS(&mRenderTarget));
 
 	mDevice->CreateRenderTargetView(mRenderTarget, nullptr, &mRTV);
+
+	D3D11_TEXTURE2D_DESC dSDesc{};
+	dSDesc.Width = WIDTH;
+	dSDesc.Height = HEIGHT;
+	dSDesc.MipLevels = 1;
+	dSDesc.ArraySize = 1;
+	dSDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	dSDesc.SampleDesc.Count = 1;
+	dSDesc.SampleDesc.Quality = 0;
+	dSDesc.Usage = D3D11_USAGE_DEFAULT;
+	dSDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+
+	mDevice->CreateTexture2D(&dSDesc, nullptr, &mDSBuffer);
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV{};
+	descDSV.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	descDSV.Texture2D.MipSlice = 0;
+
+	mDevice->CreateDepthStencilView(mDSBuffer, &descDSV, &mDSView);
+
+	D3D11_DEPTH_STENCIL_DESC dssDesc{};
+	dssDesc.DepthEnable = TRUE;
+	dssDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	dssDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+	mDevice->CreateDepthStencilState(&dssDesc, &mDSState);
 }
 
 void Renderer::InitPipeline()
@@ -113,12 +165,17 @@ void Renderer::InitPipeline()
 	  { "NORMAL",	0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 
+	D3D11_RASTERIZER_DESC rasterDesc{};
+	rasterDesc.CullMode = D3D11_CULL_NONE;
+	rasterDesc.FillMode = D3D11_FILL_SOLID;
+
 	auto VSBytecode = Read("VertexShader.cso");
 	auto PSBytecode = Read("PixelShader.cso");
 
 	mDevice->CreateVertexShader(VSBytecode.data(), VSBytecode.size(), nullptr, &mVertexShader);
 	mDevice->CreatePixelShader(PSBytecode.data(), PSBytecode.size(), nullptr, &mPixelShader);
 
+	mDevice->CreateRasterizerState(&rasterDesc, &mRasterState);
 	mDevice->CreateInputLayout(inputElementDescs, _countof(inputElementDescs), VSBytecode.data(), VSBytecode.size(), &mInputLayout);
 }
 

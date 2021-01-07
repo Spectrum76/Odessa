@@ -9,12 +9,12 @@ public:
 	Mesh(Renderer* renderer);
 	~Mesh();
 
+	void Render();
 	void Initialize(std::vector<Vertex> Vertices, std::vector<uint32_t> Indices);
 
 protected:
 	void CreateVBO(std::vector<Vertex> Vertices);
 	void CreateIBO(std::vector<uint32_t> Indices);
-	void Render();
 
 private:
 	ID3D11Buffer* mVertexBuffer;

@@ -23,6 +23,7 @@ int main()
 	while (!glfwWindowShouldClose(window))
 	{
 		renderer->Render();
+		renderer->Present();
 		glfwPollEvents();
 	}
 

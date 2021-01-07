@@ -5,9 +5,9 @@ class Types
 
 struct Vertex
 {
-	float position[3];
-	float texCoord[2];
-	float normal[3];
+	float Position[3];
+	float TexCoord[2];
+	float Normal[3];
 };
 
 struct CameraUBO
