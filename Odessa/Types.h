@@ -17,3 +17,9 @@ struct CameraUBO
 	glm::vec3 Eye;
 };
 
+struct Transform
+{
+	glm::mat4 FModel;
+	glm::mat4 iModel;
+};
+
