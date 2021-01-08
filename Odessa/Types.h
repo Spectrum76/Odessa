@@ -3,12 +3,28 @@ class Types
 {
 };
 
-struct Vertex
+class Vertex
 {
-	float Position[3];
-	float TexCoord[2];
-	float Normal[3];
+public:
+	glm::vec3 Position;
+	glm::vec2 TexCoord;
+	glm::vec3 Normal;
+
+	bool operator==(const Vertex& other) const;
 };
+
+namespace std
+{
+	template<> struct hash<Vertex>
+	{
+		size_t operator()(Vertex const& vertex) const
+		{
+			return ((hash<glm::vec3>()(vertex.Position) ^
+				(hash<glm::vec2>()(vertex.TexCoord) << 1)) >> 1) ^
+				(hash<glm::vec3>()(vertex.Normal) << 1);
+		}
+	};
+}
 
 struct CameraUBO
 {

@@ -18,6 +18,7 @@
 #include <fstream>
 #include <string>
 #include <array>
+#include <unordered_map>
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -32,11 +33,13 @@
 #define GLM_ENABLE_EXPERIMENTAL
 
 #include <Windows.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <GLFW/glfw3native.h>
+#include <GLFW\glfw3.h>
+#include <glm\glm.hpp>
+#include <GLFW\glfw3native.h>
 #include <d3d11.h>
 #include <dxgi1_4.h>
-#include <glm/gtc/matrix_transform.hpp>
+#include <glm\gtc\matrix_transform.hpp>
+#include <spdlog\spdlog.h>
+#include <glm/gtx/hash.hpp>
 
 #endif //PCH_H

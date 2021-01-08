@@ -11,11 +11,11 @@ Camera* mainCamera;
 
 bool Keys[1024];
 
-float lastX;
-float lastY;
+double lastX;
+double lastY;
 
-float xChange;
-float yChange;
+double xChange;
+double yChange;
 
 bool mouseFirstMoved = true;
 
@@ -94,5 +94,5 @@ void HandleMouse(GLFWwindow* window, double xPos, double yPos)
 	lastX = xPos;
 	lastY = yPos;
 
-	mainCamera->MouseControl(xChange, yChange);
+	mainCamera->MouseControl((float)xChange, (float)yChange);
 }
