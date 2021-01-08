@@ -17,10 +17,16 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp,
 	pitch = startPitch;
 	front = glm::vec3(0.0f, 0.0f, -1.0f);
 
+	__Data.View = glm::mat4(1.0f);
+	__Data.Proj = glm::mat4(1.0f);
+
+	__Data.Proj = glm::perspectiveFov(glm::radians(45.0f), (float)WIDTH, (float)HEIGHT, 0.1f, 1000.0f);
+
 	moveSpeed = startMoveSpeed;
 	turnSpeed = startTurnSpeed;
 
 	Update();
+	CreateUBO();
 }
 
 void Camera::KeyControl(bool* keys, GLfloat deltaTime)

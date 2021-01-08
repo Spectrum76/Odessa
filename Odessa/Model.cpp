@@ -7,10 +7,15 @@ Model::Model(Renderer* renderer) : Model(renderer->GetDevice(), renderer->GetCon
 
 Model::Model(ID3D11Device* device, ID3D11DeviceContext* context) : mDeviceRef(device), mDeviceContextRef(context)
 {
+	mUniformBuffer = nullptr;
+
+	__Data.FModel = glm::mat4(1.0f);
+	__Data.iModel = glm::mat4(1.0f);
 }
 
 Model::~Model()
 {
+	mUniformBuffer->Release();
 }
 
 void Model::Draw()
