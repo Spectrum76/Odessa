@@ -73,6 +73,11 @@ void Camera::CalculateViewMatrix()
 {
 	__Data.View = glm::lookAt(position, position + front, up);
 	__Data.Eye = position;
+
+	D3D11_MAPPED_SUBRESOURCE cbRes;
+	mDeviceContextRef->Map(mUniformBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &cbRes);
+	CopyMemory(cbRes.pData, &__Data, sizeof(CameraUBO));
+	mDeviceContextRef->Unmap(mUniformBuffer, 0);
 }
 
 Camera::~Camera()
