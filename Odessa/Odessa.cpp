@@ -46,8 +46,20 @@ int main()
 
 	while (!glfwWindowShouldClose(window))
 	{
+		double now = glfwGetTime();
+		deltaTime = now - lastTime;
+		lastTime = now;
+
+		mainCamera->KeyControl(Keys, (GLfloat)deltaTime);
+
+		mainCamera->CalculateViewMatrix();
+
 		renderer->Render();
+
+		mainCamera->Bind();
+
 		renderer->Present();
+
 		glfwPollEvents();
 	}
 

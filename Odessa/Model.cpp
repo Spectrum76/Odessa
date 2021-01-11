@@ -23,6 +23,8 @@ Model::~Model()
 
 void Model::Draw()
 {
+	mDeviceContextRef->VSSetConstantBuffers(0, 1, &mUniformBuffer);
+
 	for (auto Meshlet : MeshComponent)
 	{
 		Meshlet->Render();

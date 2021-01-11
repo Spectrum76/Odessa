@@ -12,6 +12,8 @@ public:
 		float startMoveSpeed, float startTurnSpeed,
 		ID3D11Device* device, ID3D11DeviceContext* context);
 
+	void Bind();
+
 	void KeyControl(bool* keys, GLfloat deltaTime);
 	void MouseControl(GLfloat xChange, GLfloat yChange);
 

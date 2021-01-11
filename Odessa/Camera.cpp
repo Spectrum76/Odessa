@@ -29,6 +29,11 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp,
 	CreateUBO();
 }
 
+void Camera::Bind()
+{
+	mDeviceContextRef->VSSetConstantBuffers(1, 1, &mUniformBuffer);
+}
+
 void Camera::KeyControl(bool* keys, GLfloat deltaTime)
 {
 	GLfloat velocity = moveSpeed * deltaTime;
