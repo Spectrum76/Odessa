@@ -4,17 +4,16 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
 
-Model::Model(Renderer* renderer, std::string filename) : Model(renderer->GetDevice(), renderer->GetContext(), filename)
-{
-}
-
-Model::Model(ID3D11Device* device, ID3D11DeviceContext* context, std::string filename) : mDeviceRef(device), mDeviceContextRef(context)
+Model::Model(Renderer* renderer, std::string filename) : mDeviceRef(renderer->GetDevice()), mDeviceContextRef(renderer->GetContext())
 {
 	mUniformBuffer = nullptr;
-	mFilename = filename;
 
 	__Data.FModel = glm::mat4(1.0f);
 	__Data.iModel = glm::mat4(1.0f);
+
+	Load(filename);
+	CreateUBO();
+	Update();
 }
 
 Model::~Model()
@@ -30,17 +29,14 @@ void Model::Draw()
 	}
 }
 
-void Model::Load()
+void Model::Load(std::string filename)
 {
 	tinyobj::attrib_t attrib;
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> materials;
 	std::string warn, err;
 
-	std::vector<Vertex> Vertices;
-	std::vector<uint32_t> Indices;
-
-	if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, mFilename.c_str()))
+	if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, filename.c_str()))
 	{
 		spdlog::error(warn + err);
 	}
@@ -49,6 +45,9 @@ void Model::Load()
 
 	for (const auto& shape : shapes)
 	{
+		std::vector<Vertex> Vertices;
+		std::vector<uint32_t> Indices;
+
 		for (const auto& index : shape.mesh.indices)
 		{
 			Vertex vertex;
@@ -81,6 +80,10 @@ void Model::Load()
 
 			Indices.push_back(uniqueVertices[vertex]);
 		}
+
+		Mesh* mesh = new Mesh(mDeviceRef, mDeviceContextRef);
+		mesh->Initialize(Vertices, Indices);
+		MeshComponent.push_back(mesh);
 	}
 }
 

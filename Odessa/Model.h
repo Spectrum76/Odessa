@@ -7,20 +7,18 @@ class Model
 {
 public:
 	Model(Renderer* renderer, std::string filename);
-	Model(ID3D11Device* device, ID3D11DeviceContext* context, std::string filename);
 	~Model();
 
 	void Draw();
 
 protected:
-	void Load();
+	void Load(std::string filename);
 	void Update();
 	void CreateUBO();
 
 private:
 	std::vector<Mesh*> MeshComponent;
 	Transform __Data;
-	std::string mFilename;
 
 	ID3D11Buffer* mUniformBuffer;
 
