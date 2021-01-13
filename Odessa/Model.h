@@ -1,8 +1,4 @@
 #pragma once
-#include "Mesh.h"
-#include "Types.h"
-#include "Renderer.h"
-
 class Model
 {
 public:
@@ -12,12 +8,12 @@ public:
 	void Draw();
 
 protected:
-	void Load(std::string filename);
+	void Load(std::string filename, Renderer* renderer);
 	void Update();
 	void CreateUBO();
 
 private:
-	std::vector<Mesh*> MeshComponent;
+	std::vector<std::pair<Mesh*, Texture*>> MeshComponent;
 	Transform __Data;
 
 	ID3D11Buffer* mUniformBuffer;

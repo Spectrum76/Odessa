@@ -1,4 +1,8 @@
 #include "pch.h"
+#include "Mesh.h"
+#include "Types.h"
+#include "Texture.h"
+#include "Renderer.h"
 #include "Model.h"
 
 #define TINYOBJLOADER_IMPLEMENTATION
@@ -11,7 +15,7 @@ Model::Model(Renderer* renderer, std::string filename) : mDeviceRef(renderer->Ge
 	__Data.FModel = glm::mat4(1.0f);
 	__Data.iModel = glm::mat4(1.0f);
 
-	Load(filename);
+	Load(filename, renderer);
 	CreateUBO();
 	Update();
 }
@@ -27,11 +31,12 @@ void Model::Draw()
 
 	for (auto Meshlet : MeshComponent)
 	{
-		Meshlet->Render();
+		Meshlet.second->Bind(2);
+		Meshlet.first->Render();
 	}
 }
 
-void Model::Load(std::string filename)
+void Model::Load(std::string filename, Renderer* renderer)
 {
 	tinyobj::attrib_t attrib;
 	std::vector<tinyobj::shape_t> shapes;
@@ -83,9 +88,12 @@ void Model::Load(std::string filename)
 			Indices.push_back(uniqueVertices[vertex]);
 		}
 
+		Texture* texture = new Texture(renderer, materials[shape.mesh.material_ids[0]].diffuse_texname);
+
 		Mesh* mesh = new Mesh(mDeviceRef, mDeviceContextRef);
 		mesh->Initialize(Vertices, Indices);
-		MeshComponent.push_back(mesh);
+		
+		MeshComponent.push_back(std::make_pair(mesh, texture));
 	}
 }
 

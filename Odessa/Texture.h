@@ -5,6 +5,8 @@ public:
 	Texture(Renderer* renderer, std::string filename);
 	~Texture();
 
+	void Bind(UINT slot);
+
 protected:
 	void CreateTBO(std::string filename);
 

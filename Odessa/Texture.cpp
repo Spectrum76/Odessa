@@ -20,6 +20,11 @@ Texture::~Texture()
 	mTexture->Release();
 }
 
+void Texture::Bind(UINT slot)
+{
+	mDeviceContextRef->PSSetShaderResources(slot, 1, &mSRV);
+}
+
 void Texture::CreateTBO(std::string filename)
 {
 	int TextureWidth;
