@@ -40,6 +40,7 @@ private:
 
 	ID3D11InputLayout* mInputLayout;
 	ID3D11RasterizerState* mRasterState;
+	ID3D11SamplerState* mSamplerState;
 
 	ID3D11VertexShader* mVertexShader;
 	ID3D11PixelShader* mPixelShader;

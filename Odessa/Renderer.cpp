@@ -26,6 +26,7 @@ Renderer::Renderer(GLFWwindow* window) : mWindow(window)
 
 	mInputLayout = nullptr;
 	mRasterState = nullptr;
+	mSamplerState = nullptr;
 
 	mVertexShader = nullptr;
 	mPixelShader = nullptr;
@@ -35,6 +36,7 @@ Renderer::~Renderer()
 {
 	mInputLayout->Release();
 	mRasterState->Release();
+	mSamplerState->Release();
 
 	mVertexShader->Release();
 	mPixelShader->Release();
@@ -66,6 +68,7 @@ void Renderer::Render()
 {
 	mDeviceContext->VSSetShader(mVertexShader, 0, 0);
 	mDeviceContext->PSSetShader(mPixelShader, 0, 0);
+	mDeviceContext->PSSetSamplers(0, 1, &mSamplerState);
 
 	mDeviceContext->IASetInputLayout(mInputLayout);
 	mDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -169,12 +172,21 @@ void Renderer::InitPipeline()
 	rasterDesc.CullMode = D3D11_CULL_NONE;
 	rasterDesc.FillMode = D3D11_FILL_SOLID;
 
+	D3D11_SAMPLER_DESC samplerDesc{};
+	samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
+	samplerDesc.MaxAnisotropy = 16;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+
 	auto VSBytecode = Read("VertexShader.cso");
 	auto PSBytecode = Read("PixelShader.cso");
 
 	mDevice->CreateVertexShader(VSBytecode.data(), VSBytecode.size(), nullptr, &mVertexShader);
 	mDevice->CreatePixelShader(PSBytecode.data(), PSBytecode.size(), nullptr, &mPixelShader);
 
+	mDevice->CreateSamplerState(&samplerDesc, &mSamplerState);
 	mDevice->CreateRasterizerState(&rasterDesc, &mRasterState);
 	mDevice->CreateInputLayout(inputElementDescs, _countof(inputElementDescs), VSBytecode.data(), VSBytecode.size(), &mInputLayout);
 }

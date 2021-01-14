@@ -1,6 +1,10 @@
 #include <Input.hlsli>
 
+Texture2D BaseColor : register(t0);
+
+SamplerState Sampler : register(s0);
+
 float4 main(PSInput input) : SV_TARGET
 {
-	return float4(1.0f, 1.0f, 1.0f, 1.0f);
+    return BaseColor.Sample(Sampler, input.TexCoord);
 }

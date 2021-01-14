@@ -31,7 +31,7 @@ void Model::Draw()
 
 	for (auto Meshlet : MeshComponent)
 	{
-		Meshlet.second->Bind(2);
+		Meshlet.second->Bind(0);
 		Meshlet.first->Render();
 	}
 }
