@@ -22,11 +22,24 @@ Texture::~Texture()
 
 void Texture::Bind(UINT slot)
 {
-	mDeviceContextRef->PSSetShaderResources(slot, 1, &mSRV);
+	if (mSRV)
+	{
+		mDeviceContextRef->PSSetShaderResources(slot, 1, &mSRV);
+	}
+	else
+	{
+		ID3D11ShaderResourceView* nullSRV[1] = { nullptr };
+		mDeviceContextRef->PSSetShaderResources(slot, 1, nullSRV);
+	}
 }
 
 void Texture::CreateTBO(std::string filename)
 {
+	if (filename.empty())
+	{
+		return;
+	}
+
 	int TextureWidth;
 	int TextureHeight;
 	int TextureChannel;
