@@ -189,6 +189,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Types.h" />
+    <ClInclude Include="Uniform.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\glfw-build\src\glfw.vcxproj">
