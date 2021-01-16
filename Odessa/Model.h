@@ -7,6 +7,10 @@ public:
 
 	void Draw();
 
+	void Position(glm::vec3 pos);
+	void Rotation(glm::vec3 axis, float angle);
+	void Scale(glm::vec3 scale);
+
 protected:
 	void Load(std::string filename, Renderer* renderer);
 	void Update();
