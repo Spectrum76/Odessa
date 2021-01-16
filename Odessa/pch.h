@@ -41,6 +41,6 @@
 #include <dxgi1_4.h>
 #include <glm\gtc\matrix_transform.hpp>
 #include <spdlog\spdlog.h>
-#include <glm/gtx/hash.hpp>
+#include <glm\gtx\hash.hpp>
 
 #endif //PCH_H
