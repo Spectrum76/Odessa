@@ -101,10 +101,18 @@ ID3D11DeviceContext* Renderer::GetContext()
 
 void Renderer::InitAPI()
 {
-	CreateDXGIFactory2(0, IID_PPV_ARGS(&mFactory));
+	UINT dxgiFactoryFlags = 0;
+	UINT d3d11DeviceFlags = 0;
+
+#ifdef _DEBUG
+	dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
+	d3d11DeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif // _DEBUG
+
+	CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&mFactory));
 
 	D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE,
-		NULL, D3D11_CREATE_DEVICE_DEBUG,
+		NULL, d3d11DeviceFlags,
 		NULL, NULL, D3D11_SDK_VERSION,
 		&mDevice, nullptr, &mDeviceContext);
 }
