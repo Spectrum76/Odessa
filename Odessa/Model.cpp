@@ -40,18 +40,21 @@ void Model::Position(glm::vec3 pos)
 {
 	__Data.FModel = glm::translate(__Data.FModel, pos);
 	__Data.iModel = glm::inverse(__Data.FModel);
+	Update();
 }
 
 void Model::Rotation(glm::vec3 axis, float angle)
 {
 	__Data.FModel = glm::rotate(__Data.FModel, angle, axis);
 	__Data.iModel = glm::inverse(__Data.FModel);
+	Update();
 }
 
 void Model::Scale(glm::vec3 scale)
 {
 	__Data.FModel = glm::scale(__Data.FModel, scale);
 	__Data.iModel = glm::inverse(__Data.FModel);
+	Update();
 }
 
 void Model::Load(std::string filename, Renderer* renderer)
