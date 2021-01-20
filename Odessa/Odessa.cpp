@@ -2,12 +2,14 @@
 // Copyright (c) 2020-2021 Rayvant.
 
 #include "pch.h"
+#include "Scene.h"
 #include "Camera.h"
 #include "Renderer.h"
 
 GLFWwindow* window;
 Renderer* renderer;
 Camera* mainCamera;
+Scene* scene;
 
 bool Keys[1024];
 
@@ -44,6 +46,8 @@ int main()
 
 	mainCamera = new Camera(renderer);
 
+	scene = new Scene(renderer);
+
 	while (!glfwWindowShouldClose(window))
 	{
 		double now = glfwGetTime();
@@ -57,6 +61,8 @@ int main()
 		renderer->Render();
 
 		mainCamera->Bind();
+
+		scene->DrawScene();
 
 		renderer->Present();
 

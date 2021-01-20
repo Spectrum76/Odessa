@@ -69,6 +69,9 @@
     <ClCompile Include="..\imgui\backends\imgui_impl_glfw.cpp">
       <Filter>ImGui Files</Filter>
     </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -112,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="..\imgui\backends\imgui_impl_glfw.h">
       <Filter>ImGui Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
