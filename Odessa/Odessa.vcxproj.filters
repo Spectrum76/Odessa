@@ -66,6 +66,9 @@
     <ClCompile Include="..\imgui\backends\imgui_impl_win32.cpp">
       <Filter>ImGui Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\imgui\backends\imgui_impl_glfw.cpp">
+      <Filter>ImGui Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -105,6 +108,9 @@
       <Filter>ImGui Files</Filter>
     </ClInclude>
     <ClInclude Include="..\imgui\backends\imgui_impl_win32.h">
+      <Filter>ImGui Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\backends\imgui_impl_glfw.h">
       <Filter>ImGui Files</Filter>
     </ClInclude>
   </ItemGroup>
