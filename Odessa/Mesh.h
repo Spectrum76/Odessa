@@ -9,8 +9,8 @@ public:
 	Mesh(Renderer* renderer);
 	~Mesh();
 
-	void Render();
-	void DrawDeferred(ID3D11DeviceContext* DefCtx);
+	void Draw();
+	void Draw(ID3D11DeviceContext* DefCtx);
 	void Initialize(std::vector<Vertex> Vertices, std::vector<uint32_t> Indices);
 
 protected:

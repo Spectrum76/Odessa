@@ -32,18 +32,18 @@ void Model::Draw()
 	for (auto Meshlet : MeshComponent)
 	{
 		Meshlet.second->Bind(0);
-		Meshlet.first->Render();
+		Meshlet.first->Draw();
 	}
 }
 
-void Model::DrawDeferred(ID3D11DeviceContext* DefCtx)
+void Model::Draw(ID3D11DeviceContext* DefCtx)
 {
 	DefCtx->VSSetConstantBuffers(0, 1, &mUniformBuffer);
 
 	for (auto Meshlet : MeshComponent)
 	{
-		Meshlet.second->BindDeferred(DefCtx, 0);
-		Meshlet.first->DrawDeferred(DefCtx);
+		Meshlet.second->Bind(DefCtx, 0);
+		Meshlet.first->Draw(DefCtx);
 	}
 }
 

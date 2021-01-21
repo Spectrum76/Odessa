@@ -27,10 +27,10 @@ void Scene::DrawScene()
 	}
 }
 
-void Scene::DrawSceneDeferred(ID3D11DeviceContext* DefCtx)
+void Scene::DrawScene(ID3D11DeviceContext* DefCtx)
 {
 	for (auto model : mSceneModels)
 	{
-		model->DrawDeferred(DefCtx);
+		model->Draw(DefCtx);
 	}
 }

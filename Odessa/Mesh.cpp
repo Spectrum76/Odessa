@@ -65,14 +65,14 @@ void Mesh::CreateIBO(std::vector<uint32_t> Indices)
 	mDeviceRef->CreateBuffer(&IndexBufferDesc, &iInitData, &mIndexBuffer);
 }
 
-void Mesh::Render()
+void Mesh::Draw()
 {
 	mDeviceContextRef->IASetVertexBuffers(0, 1, &mVertexBuffer, &Stride, &Offset);
 	mDeviceContextRef->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	mDeviceContextRef->DrawIndexed(IndexCount, 0, 0);
 }
 
-void Mesh::DrawDeferred(ID3D11DeviceContext* DefCtx)
+void Mesh::Draw(ID3D11DeviceContext* DefCtx)
 {
 	DefCtx->IASetVertexBuffers(0, 1, &mVertexBuffer, &Stride, &Offset);
 	DefCtx->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);

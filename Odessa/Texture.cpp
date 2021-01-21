@@ -33,7 +33,7 @@ void Texture::Bind(UINT slot)
 	}
 }
 
-void Texture::BindDeferred(ID3D11DeviceContext* DefCtx, UINT slot)
+void Texture::Bind(ID3D11DeviceContext* DefCtx, UINT slot)
 {
 	if (mSRV)
 	{

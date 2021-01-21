@@ -12,7 +12,7 @@ public:
 
 	void AddModel(std::string filename);
 	void DrawScene();
-	void DrawSceneDeferred(ID3D11DeviceContext* DefCtx);
+	void DrawScene(ID3D11DeviceContext* DefCtx);
 
 private:
 	Renderer* mRendererRef;
