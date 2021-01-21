@@ -10,6 +10,7 @@ public:
 	~Mesh();
 
 	void Render();
+	void DrawDeferred(ID3D11DeviceContext* DefCtx);
 	void Initialize(std::vector<Vertex> Vertices, std::vector<uint32_t> Indices);
 
 protected:

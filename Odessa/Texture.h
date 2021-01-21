@@ -6,6 +6,7 @@ public:
 	~Texture();
 
 	void Bind(UINT slot);
+	void BindDeferred(ID3D11DeviceContext* DefCtx, UINT slot);
 
 protected:
 	void CreateTBO(std::string filename);

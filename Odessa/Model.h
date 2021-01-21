@@ -6,6 +6,7 @@ public:
 	~Model();
 
 	void Draw();
+	void DrawDeferred(ID3D11DeviceContext* DefCtx);
 
 	void Position(glm::vec3 pos);
 	void Rotation(glm::vec3 axis, float angle);

@@ -33,6 +33,19 @@ void Texture::Bind(UINT slot)
 	}
 }
 
+void Texture::BindDeferred(ID3D11DeviceContext* DefCtx, UINT slot)
+{
+	if (mSRV)
+	{
+		DefCtx->PSSetShaderResources(slot, 1, &mSRV);
+	}
+	else
+	{
+		ID3D11ShaderResourceView* nullSRV[1] = { nullptr };
+		DefCtx->PSSetShaderResources(slot, 1, nullSRV);
+	}
+}
+
 void Texture::CreateTBO(std::string filename)
 {
 	if (filename.empty())

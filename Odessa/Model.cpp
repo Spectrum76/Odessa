@@ -36,6 +36,17 @@ void Model::Draw()
 	}
 }
 
+void Model::DrawDeferred(ID3D11DeviceContext* DefCtx)
+{
+	DefCtx->VSSetConstantBuffers(0, 1, &mUniformBuffer);
+
+	for (auto Meshlet : MeshComponent)
+	{
+		Meshlet.second->BindDeferred(DefCtx, 0);
+		Meshlet.first->DrawDeferred(DefCtx);
+	}
+}
+
 void Model::Position(glm::vec3 pos)
 {
 	__Data.FModel = glm::translate(__Data.FModel, pos);

@@ -10,9 +10,9 @@ public:
 
 protected:
 	ID3D11Device* mDeviceRef;
-	ID3D11DeviceContext* mDeviceContextRef;
+	ID3D11DeviceContext* mImmCtxRef;
 
 	ID3D11CommandList* mCmdList;
-	ID3D11DeviceContext* mContext;
+	ID3D11DeviceContext* mDefCtx;
 };
 

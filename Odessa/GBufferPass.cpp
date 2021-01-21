@@ -57,34 +57,34 @@ GBufferPass::~GBufferPass()
 
 void GBufferPass::Execute()
 {
-	mDeviceContextRef->ExecuteCommandList(mCmdList, false);
+	mImmCtxRef->ExecuteCommandList(mCmdList, false);
 }
 
 void GBufferPass::RecordExecution()
 {
-	mContext->VSSetShader(mGBufferVertexShader, 0, 0);
-	mContext->PSSetShader(mGBufferPixelShader, 0, 0);
-	mContext->PSSetSamplers(0, 1, &mSamplerState);
+	mDefCtx->VSSetShader(mGBufferVertexShader, 0, 0);
+	mDefCtx->PSSetShader(mGBufferPixelShader, 0, 0);
+	mDefCtx->PSSetSamplers(0, 1, &mSamplerState);
 
-	mContext->IASetInputLayout(mInputLayout);
-	mContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	mDefCtx->IASetInputLayout(mInputLayout);
+	mDefCtx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	mContext->RSSetViewports(1, &mViewport);
-	mContext->RSSetState(mRasterState);
+	mDefCtx->RSSetViewports(1, &mViewport);
+	mDefCtx->RSSetState(mRasterState);
 
 	ID3D11RenderTargetView* mRTVs[] = { gAlbedoView, gNormView, gPosView };
 
-	mContext->OMSetRenderTargets(1, mRTVs, mDSView);
-	mContext->OMSetDepthStencilState(mDSState, 1);
+	mDefCtx->OMSetRenderTargets(1, mRTVs, mDSView);
+	mDefCtx->OMSetDepthStencilState(mDSState, 1);
 
 	const float clearColor[] = { 0.3f, 0.3f, 0.3f, 1.0f };
 	
 	for (size_t i = 0; i < _countof(mRTVs); i++)
 	{
-		mContext->ClearRenderTargetView(mRTVs[i], clearColor);
+		mDefCtx->ClearRenderTargetView(mRTVs[i], clearColor);
 	}
 	
-	mContext->ClearDepthStencilView(mDSView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	mDefCtx->ClearDepthStencilView(mDSView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 void GBufferPass::CreateFramebuffer()

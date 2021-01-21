@@ -71,3 +71,10 @@ void Mesh::Render()
 	mDeviceContextRef->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	mDeviceContextRef->DrawIndexed(IndexCount, 0, 0);
 }
+
+void Mesh::DrawDeferred(ID3D11DeviceContext* DefCtx)
+{
+	DefCtx->IASetVertexBuffers(0, 1, &mVertexBuffer, &Stride, &Offset);
+	DefCtx->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	DefCtx->DrawIndexed(IndexCount, 0, 0);
+}
