@@ -13,6 +13,7 @@ public:
 		ID3D11Device* device, ID3D11DeviceContext* context);
 
 	void Bind();
+	void Bind(ID3D11DeviceContext* DefCtx);
 
 	void KeyControl(bool* keys, GLfloat deltaTime);
 	void MouseControl(GLfloat xChange, GLfloat yChange);

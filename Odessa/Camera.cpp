@@ -34,6 +34,11 @@ void Camera::Bind()
 	mDeviceContextRef->VSSetConstantBuffers(1, 1, &mUniformBuffer);
 }
 
+void Camera::Bind(ID3D11DeviceContext* DefCtx)
+{
+	DefCtx->VSSetConstantBuffers(1, 1, &mUniformBuffer);
+}
+
 void Camera::KeyControl(bool* keys, GLfloat deltaTime)
 {
 	GLfloat velocity = moveSpeed * deltaTime;
