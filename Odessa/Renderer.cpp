@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Renderer.h"
+#include "Utilities.h"
 
 Renderer::Renderer(GLFWwindow* window) : mWindow(window)
 {
@@ -200,16 +201,4 @@ void Renderer::InitPipeline()
 	mDevice->CreateSamplerState(&samplerDesc, &mSamplerState);
 	mDevice->CreateRasterizerState(&rasterDesc, &mRasterState);
 	mDevice->CreateInputLayout(inputElementDescs, _countof(inputElementDescs), VSBytecode.data(), VSBytecode.size(), &mInputLayout);
-}
-
-std::vector<char> Renderer::Read(std::string File)
-{
-	std::ifstream read(File.c_str(), std::ios::binary | std::ios::ate);
-	std::ifstream::pos_type pos = read.tellg();
-
-	std::vector<char> buff(pos);
-	read.seekg(0, std::ios::beg);
-	read.read(buff.data(), pos);
-
-	return buff;
 }

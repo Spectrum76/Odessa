@@ -18,8 +18,6 @@ protected:
 	void InitFrameBuffer();
 	void InitPipeline();
 
-	std::vector<char> Read(std::string File);
-
 private:
 	GLFWwindow* mWindow;
 
