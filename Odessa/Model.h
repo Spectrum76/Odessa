@@ -1,4 +1,8 @@
 #pragma once
+
+struct Transform;
+class Texture;
+
 class Model
 {
 public:

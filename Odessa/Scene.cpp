@@ -1,4 +1,9 @@
 #include "pch.h"
+#include "Mesh.h"
+#include "Types.h"
+#include "Texture.h"
+#include "Model.h"
+#include "Renderer.h"
 #include "Scene.h"
 
 Scene::Scene(Renderer* renderer) : mRendererRef(renderer)

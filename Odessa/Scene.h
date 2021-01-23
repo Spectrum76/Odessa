@@ -1,8 +1,7 @@
 #pragma once
-#include "Mesh.h"
-#include "Texture.h"
-#include "Model.h"
-#include "Renderer.h"
+
+class Model;
+class Renderer;
 
 class Scene
 {

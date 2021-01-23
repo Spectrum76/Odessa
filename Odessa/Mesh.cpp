@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "Mesh.h"
+#include "Types.h"
+#include "Renderer.h"
 
 Mesh::Mesh(ID3D11Device* device, ID3D11DeviceContext* context) : mDeviceRef(device), mDeviceContextRef(context)
 {

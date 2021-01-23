@@ -1,6 +1,7 @@
 #pragma once
-#include "Types.h"
-#include "Renderer.h"
+
+class Vertex;
+class Renderer;
 
 class Mesh
 {
