@@ -1,6 +1,7 @@
 #pragma once
-#include "Types.h"
-#include "Renderer.h"
+
+class Renderer;
+struct CameraUBO;
 
 class Camera
 {

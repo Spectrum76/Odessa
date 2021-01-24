@@ -3,6 +3,7 @@
 
 #include "pch.h"
 #include "Scene.h"
+#include "Types.h"
 #include "Camera.h"
 #include "Renderer.h"
 
