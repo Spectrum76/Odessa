@@ -5,6 +5,7 @@ public:
 	RenderPass(ID3D11Device* device, ID3D11DeviceContext* context);
 	virtual ~RenderPass();
 
+	virtual void Record() = 0;
 	virtual void Execute() = 0;
 	virtual void RecordExecution() = 0;
 

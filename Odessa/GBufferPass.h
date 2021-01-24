@@ -6,6 +6,7 @@ public:
 	GBufferPass(ID3D11Device* device, ID3D11DeviceContext* context);
 	~GBufferPass();
 
+	void Record() override;
 	void Execute() override;
 	void RecordExecution() override;
 
