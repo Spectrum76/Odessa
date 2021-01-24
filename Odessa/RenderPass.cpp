@@ -11,6 +11,10 @@ RenderPass::RenderPass(ID3D11Device* device, ID3D11DeviceContext* context) : mDe
 
 RenderPass::~RenderPass()
 {
-	mCmdList->Release();
+	if (mCmdList)
+	{
+		mCmdList->Release();
+	}
+
 	mDefCtx->Release();
 }

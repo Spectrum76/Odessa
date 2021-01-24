@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "Utilities.h"
 #include "Scene.h"
+#include "GBufferPass.h"
 
 Renderer::Renderer(GLFWwindow* window) : mWindow(window)
 {
@@ -26,6 +27,8 @@ Renderer::Renderer(GLFWwindow* window) : mWindow(window)
 	mDSState = nullptr;
 	mDSView = nullptr;
 
+	mGBufferPass = nullptr;
+
 	mInputLayout = nullptr;
 	mRasterState = nullptr;
 	mSamplerState = nullptr;
@@ -42,6 +45,8 @@ Renderer::~Renderer()
 
 	mVertexShader->Release();
 	mPixelShader->Release();
+
+	delete mGBufferPass;
 
 	mDSBuffer->Release();
 	mDSState->Release();
@@ -64,6 +69,7 @@ void Renderer::Init()
 	InitSwapchain();
 	InitFrameBuffer();
 	InitPipeline();
+	InitPasses();
 }
 
 void Renderer::Render()
@@ -94,6 +100,10 @@ void Renderer::Present()
 void Renderer::Render(Scene* scene)
 {
 	Render();
+
+	scene->DrawScene();
+
+	mGBufferPass->Record();
 
 	scene->DrawScene();
 }
@@ -209,4 +219,9 @@ void Renderer::InitPipeline()
 	mDevice->CreateSamplerState(&samplerDesc, &mSamplerState);
 	mDevice->CreateRasterizerState(&rasterDesc, &mRasterState);
 	mDevice->CreateInputLayout(inputElementDescs, _countof(inputElementDescs), VSBytecode.data(), VSBytecode.size(), &mInputLayout);
+}
+
+void Renderer::InitPasses()
+{
+	mGBufferPass = new GBufferPass(mDevice, mDeviceContext);
 }

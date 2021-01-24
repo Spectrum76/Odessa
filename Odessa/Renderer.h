@@ -1,6 +1,7 @@
 #pragma once
 
 class Scene;
+class GBufferPass;
 
 class Renderer
 {
@@ -22,6 +23,7 @@ protected:
 	void InitSwapchain();
 	void InitFrameBuffer();
 	void InitPipeline();
+	void InitPasses();
 
 private:
 	GLFWwindow* mWindow;
@@ -40,6 +42,8 @@ private:
 	ID3D11Texture2D* mDSBuffer;
 	ID3D11DepthStencilView* mDSView;
 	ID3D11DepthStencilState* mDSState;
+
+	GBufferPass* mGBufferPass;
 
 	ID3D11InputLayout* mInputLayout;
 	ID3D11RasterizerState* mRasterState;

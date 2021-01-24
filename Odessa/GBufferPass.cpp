@@ -30,6 +30,9 @@ GBufferPass::GBufferPass(ID3D11Device* device, ID3D11DeviceContext* context) : R
 	mDSState = nullptr;
 	mGBufferVertexShader = nullptr;
 	mGBufferPixelShader = nullptr;
+
+	CreateFramebuffer();
+	CreatePipeline();
 }
 
 GBufferPass::~GBufferPass()
@@ -67,9 +70,9 @@ void GBufferPass::Record()
 	mImmCtxRef->RSSetViewports(1, &mViewport);
 	mImmCtxRef->RSSetState(mRasterState);
 
-	ID3D11RenderTargetView* mRTVs[] = { gAlbedoView, gNormView, gPosView };
+	ID3D11RenderTargetView* mRTVs[] = { gPosView, gNormView, gAlbedoView };
 
-	mImmCtxRef->OMSetRenderTargets(1, mRTVs, mDSView);
+	mImmCtxRef->OMSetRenderTargets(_countof(mRTVs), mRTVs, mDSView);
 	mImmCtxRef->OMSetDepthStencilState(mDSState, 1);
 
 	const float clearColor[] = { 0.3f, 0.3f, 0.3f, 1.0f };
@@ -99,9 +102,9 @@ void GBufferPass::RecordExecution()
 	mDefCtx->RSSetViewports(1, &mViewport);
 	mDefCtx->RSSetState(mRasterState);
 
-	ID3D11RenderTargetView* mRTVs[] = { gAlbedoView, gNormView, gPosView };
+	ID3D11RenderTargetView* mRTVs[] = { gPosView, gNormView, gAlbedoView };
 
-	mDefCtx->OMSetRenderTargets(1, mRTVs, mDSView);
+	mDefCtx->OMSetRenderTargets(_countof(mRTVs), mRTVs, mDSView);
 	mDefCtx->OMSetDepthStencilState(mDSState, 1);
 
 	const float clearColor[] = { 0.3f, 0.3f, 0.3f, 1.0f };
@@ -195,8 +198,8 @@ void GBufferPass::CreatePipeline()
 	samplerDesc.MinLOD = 0.0f;
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-	auto VSBytecode = Read("GBufferVertexShader.cso");
-	auto PSBytecode = Read("GBufferPixelShader.cso");
+	auto VSBytecode = Read("GBufferVS.cso");
+	auto PSBytecode = Read("GBufferPS.cso");
 
 	mDeviceRef->CreateVertexShader(VSBytecode.data(), VSBytecode.size(), nullptr, &mGBufferVertexShader);
 	mDeviceRef->CreatePixelShader(PSBytecode.data(), PSBytecode.size(), nullptr, &mGBufferPixelShader);
