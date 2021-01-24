@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Renderer.h"
 #include "Utilities.h"
+#include "Scene.h"
 
 Renderer::Renderer(GLFWwindow* window) : mWindow(window)
 {
@@ -88,6 +89,13 @@ void Renderer::Render()
 void Renderer::Present()
 {
 	mSwapchain->Present(0, 0);
+}
+
+void Renderer::Render(Scene* scene)
+{
+	Render();
+
+	scene->DrawScene();
 }
 
 ID3D11Device* Renderer::GetDevice()

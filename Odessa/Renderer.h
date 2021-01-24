@@ -1,4 +1,7 @@
 #pragma once
+
+class Scene;
+
 class Renderer
 {
 public:
@@ -8,6 +11,8 @@ public:
 	void Init();
 	void Render();
 	void Present();
+
+	void Render(Scene* scene);
 
 	ID3D11Device* GetDevice();
 	ID3D11DeviceContext* GetContext();

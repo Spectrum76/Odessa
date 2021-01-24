@@ -59,9 +59,7 @@ int main()
 
 		mainCamera->CalculateViewMatrix();
 
-		renderer->Render();
-
-		scene->DrawScene();
+		renderer->Render(scene);
 
 		renderer->Present();
 
