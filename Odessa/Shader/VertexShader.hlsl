@@ -20,6 +20,7 @@ PSInput main(float3 Position : POSITION, float2 TexCoord : TEXCOORD, float3 Norm
     result.Position = mul(float4(Position, 1.0f), mul(Model, mul(View, Proj)));
     result.TexCoord = TexCoord;
     result.Normal = mul(Normal, float3x3(iModel[0].xyz, iModel[1].xyz, iModel[2].xyz));
+    result.PositionWS = mul(float4(Position, 1.0f), Model).xyz;
     
     return result;
 }
