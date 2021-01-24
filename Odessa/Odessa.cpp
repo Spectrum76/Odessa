@@ -47,7 +47,7 @@ int main()
 
 	mainCamera = new Camera(renderer);
 
-	scene = new Scene(renderer);
+	scene = new Scene(renderer, mainCamera);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -60,8 +60,6 @@ int main()
 		mainCamera->CalculateViewMatrix();
 
 		renderer->Render();
-
-		mainCamera->Bind();
 
 		scene->DrawScene();
 

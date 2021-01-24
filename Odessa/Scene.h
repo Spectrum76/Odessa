@@ -2,11 +2,12 @@
 
 class Model;
 class Renderer;
+class Camera;
 
 class Scene
 {
 public:
-	Scene(Renderer* renderer);
+	Scene(Renderer* renderer, Camera* camera);
 	~Scene();
 
 	void AddModel(std::string filename);
@@ -15,6 +16,7 @@ public:
 
 private:
 	Renderer* mRendererRef;
+	Camera* mCameraRef;
 
 	std::vector<Model*> mSceneModels;
 };

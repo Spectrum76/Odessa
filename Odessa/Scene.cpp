@@ -4,9 +4,10 @@
 #include "Texture.h"
 #include "Model.h"
 #include "Renderer.h"
+#include "Camera.h"
 #include "Scene.h"
 
-Scene::Scene(Renderer* renderer) : mRendererRef(renderer)
+Scene::Scene(Renderer* renderer, Camera* camera) : mRendererRef(renderer), mCameraRef(camera)
 {
 }
 
@@ -26,6 +27,8 @@ void Scene::AddModel(std::string filename)
 
 void Scene::DrawScene()
 {
+	mCameraRef->Bind();
+
 	for (auto model : mSceneModels)
 	{
 		model->Draw();
@@ -34,6 +37,8 @@ void Scene::DrawScene()
 
 void Scene::DrawScene(ID3D11DeviceContext* DefCtx)
 {
+	mCameraRef->Bind(DefCtx);
+
 	for (auto model : mSceneModels)
 	{
 		model->Draw(DefCtx);
